@@ -9,7 +9,9 @@
 	  *pdf-viewer*
 	  *satysfi-lib*
 	  *keymap*
-	  *hook*
+	  *complete-command*
+	  *satysfi-mode-hook*
+	  *before-compile-hook*
 	  ))
 
 (defvar *satysfi-cmd* "satysfi.exe")
@@ -28,7 +30,8 @@
      ("^@import:" nil 0 nil)
      )))
 
-(defvar *hook* nil)
+(defvar *satysfi-mode-hook* nil)
+(defvar *before-compile-hook* nil)
 (defvar *complete-command* nil)
 
 (defvar *keymap* (make-sparse-keymap))
@@ -253,7 +256,7 @@
   (ed::set-buffer-local 'indent-tabs-mode nil)
   (setq build-summary-function 'satysfi::summary-of-functions)
   (make-local-variable '*post-command-hook*)
-  (run-hooks 'satysfi::*hook*))
+  (run-hooks 'satysfi::*satysfi-mode-hook*))
 
 (export '(satysfi-mode))
 
