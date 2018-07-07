@@ -74,11 +74,11 @@
   (let ((fns nil))
     (save-excursion
       (beginning-of-buffer)
-      (while (scan-buffer "^let\\(-rec\\)? +\\([^ ]+ +[^ ]+.*\\)"
+      (while (scan-buffer "^let\\(-rec\\|-inline\\|-block\\)? .+="
 			  :regexp t :no-dup t)
-	(let ((def (match-string 2))
+	(let ((def (match-string 0))
 	      (lno (current-line-number)))
-	  (push (list lno def) fns))))
+	  (push (list lno (subseq def 0 (1- (length def)))) fns))))
     (nreverse fns)))
 
 (defun point-at-bol ()
