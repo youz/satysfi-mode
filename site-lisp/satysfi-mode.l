@@ -48,15 +48,16 @@
 (defparameter *logbuffer-keymap* (make-sparse-keymap))
 (define-key *logbuffer-keymap* #\F10 'jump-to-error)
 
-(defparameter *syntax-table* (make-syntax-table))
-(set-syntax-string *syntax-table* #\`)
-(set-syntax-symbol *syntax-table* #\_)
-(set-syntax-symbol *syntax-table* #\-)
-(set-syntax-match *syntax-table* #\( #\))
-(set-syntax-match *syntax-table* #\{ #\})
-(set-syntax-match *syntax-table* #\[ #\])
-(set-syntax-start-comment *syntax-table* #\% t)
-(set-syntax-end-comment *syntax-table* #\LFD nil t)
+(defparameter *syntax-table*
+  (let ((tbl (make-syntax-table)))
+    (map () #'(lambda (c) (set-syntax-symbol tbl c)) "&'*+-./<=>\\^_|")
+    (set-syntax-string tbl #\`)
+    (set-syntax-match tbl #\( #\))
+    (set-syntax-match tbl #\{ #\})
+    (set-syntax-match tbl #\[ #\])
+    (set-syntax-start-comment tbl #\% t)
+    (set-syntax-end-comment tbl #\LFD nil t)
+    tbl))
 
 ;;; utility
 (defmacro whenlet (var expr &body body)
