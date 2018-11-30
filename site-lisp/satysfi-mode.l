@@ -43,6 +43,8 @@
 (define-key *keymap* '(#\C-c #\c) 'compile-to-pdf)
 (define-key *keymap* '(#\C-c #\C-c) 'compile-and-view-pdf)
 (define-key *keymap* '(#\C-c #\C-v) 'view-compiled-pdf)
+(define-key *keymap* '(#\C-c #\C-t) 'typecheck)
+
 
 (defconstant +logbuffer-name+ "*satysfi-output*")
 (defparameter *logbuffer-keymap* (make-sparse-keymap))
@@ -135,9 +137,9 @@
 	(file (pathname-name srcpath)))
     (merge-pathnames (concat file ".pdf") path)))
 
-(defun make-command-line (src pdf debug)
-  (format nil "\"~A\" --full-path -o \"~A\" ~:[~;--debug-show-bbox~] \"~A\""
-	  *satysfi-cmd* pdf debug src))
+(defun make-command-line (src pdf debug typecheckonly)
+  (format nil "\"~A\" --full-path -o \"~A\" ~:[~;--debug-show-bbox~] ~:[~;-t~] \"~A\""
+	  *satysfi-cmd* pdf debug typecheckonly src))
 
 (defun highlight-error-message ()
   (save-excursion
@@ -171,13 +173,13 @@
     (whenlet proc (buffer-process logbuf)
       (eq (process-status proc) :run))))
 
-(defun run-satysfi (srcbuf &key onsuccess debug)
+(defun run-satysfi (srcbuf &key onsuccess debug typecheckonly)
   (when (is-satysfi-running)
     (message "SATySFi is running")
     (return-from run-satysfi))
   (let* ((src (get-buffer-file-name srcbuf))
 	 (pdf (pdf-name src))
-	 (cmd (make-command-line src pdf debug)))
+	 (cmd (make-command-line src pdf debug typecheckonly)))
     (when (file-exist-p pdf)
       (delete-file pdf :if-access-denied :error))
     (let ((logbuf (get-buffer-create +logbuffer-name+)))
@@ -232,6 +234,11 @@
 (defun view-compiled-pdf ()
   (interactive)
   (view-pdf (pdf-name (get-buffer-file-name))))
+
+(defun typecheck ()
+  (interactive "p")
+  (run-hooks '*before-compile-hook*)
+  (run-satysfi (selected-buffer) :typecheckonly t))
 
 
 ;;; mode definition
