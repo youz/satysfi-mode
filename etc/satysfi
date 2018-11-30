@@ -1,8 +1,6 @@
 ; -*- mode:satysfi -*-
 ;*0
 ;; keywords (from SATySFi/src/frontend/lexer.mll)
-; not
-; mod
 if
 then
 else
@@ -130,7 +128,6 @@ MultiCell
 deco
 deco-set
 
-
 ;; primitives (from SATySFi/src/frontend/bytecomp/vminstdef.yaml)
 ;*0
 ^
@@ -176,6 +173,7 @@ math-paren
 math-paren-with-middle
 math-upper
 math-lower
+math-pull-in-scripts
 math-char
 math-big-char
 math-char-with-kern
@@ -200,10 +198,16 @@ close-with-line
 close-with-bezier
 read-inline
 read-block
+stringify-inline
+stringify-block
+deepen-indent
+break
+get-initial-text-info
 embed-block-breakable
 line-break
 page-break
 block-frame-breakable
+add-footnote
 embed-block-top
 block-skip
 embed-block-bottom
@@ -213,6 +217,8 @@ get-initial-context
 set-hyphen-min
 set-min-gap-of-lines
 set-space-ratio
+set-space-ratio-between-scripts
+get-space-ratio-between-scripts
 set-paragraph-margin
 set-min-paragraph-ascender-and-descender
 set-font-size
@@ -242,6 +248,7 @@ inline-frame-inner
 inline-frame-fixed
 inline-frame-breakable
 inline-graphics
+inline-graphics-outer
 script-guard
 discretionary
 register-cross-reference
@@ -260,7 +267,8 @@ string-match
 split-into-lines
 split-on-regexp
 arabic
-; float
+show-float
+float
 round
 draw-text
 stroke
@@ -275,5 +283,7 @@ acos
 tan
 atan
 atan2
+set-word-break-penalty
 set-every-word-break
+get-every-word-break
 probe-cross-reference
